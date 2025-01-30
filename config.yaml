@@ -1,0 +1,71 @@
+# AWS Cost Analysis Configuration
+# Version: 1.0.0
+# Last Updated: 2025-01-30
+
+# Analysis Configuration
+analysis:
+  forecast_periods: 30
+  anomaly_sensitivity: 0.1
+  min_saving_threshold: 1000.0
+  report_format: "pdf"
+
+# Snowflake Connection Configuration
+snowflake:
+  account: "your_snowflake_account"
+  database: "AWS_COST_DB"
+  schema: "PUBLIC"
+  warehouse: "XSMALL_WH"
+  role: "GUEST_USER_ROLE"
+
+# AWS Configuration
+aws:
+  regions:
+    - "us-east-1"
+    - "us-west-2"
+  services:
+    - "AmazonEC2"
+    - "AmazonS3"
+    - "AmazonRDS"
+    - "AWSLambda"
+
+# Optimization Settings
+optimization:
+  ec2:
+    min_utilization_threshold: 0.3
+    rightsizing_savings_factor: 0.4
+  storage:
+    s3_lifecycle_savings_factor: 0.3
+    inactive_volume_threshold_days: 30
+  reserved_instances:
+    min_usage_hours: 730
+    savings_factor: 0.4
+
+# Reporting Configuration
+reporting:
+  template_path: "templates/report_template.html"
+  output_dir: "reports"
+  include_sections:
+    executive_summary: true
+    cost_forecast: true
+    anomalies: true
+    optimization: true
+    recommendations: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  file_path: "logs/aws_cost_analysis.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Dashboard Configuration
+dashboard:
+  refresh_interval_minutes: 60
+  chart_theme: "plotly_white"
+  color_palette:
+    - "#2563eb"  # Blue
+    - "#9333ea"  # Purple
+    - "#22c55e"  # Green
+    - "#eab308"  # Yellow
+    - "#dc2626"  # Red
