@@ -14,9 +14,27 @@ from aws_cost_analyzer import (
 )
 
 def load_config():
-    """Load configuration from YAML file"""
-    with open("config/config.yaml") as f:
-        return AnalysisConfig(**yaml.safe_load(f))
+    """Load configuration from YAML file with error handling"""
+    try:
+        config_path = Path("config/config.yaml")
+        if not config_path.exists():
+            raise FileNotFoundError(f"Configuration file not found at {config_path}")
+            
+        with open(config_path) as f:
+            config_dict = yaml.safe_load(f)
+            
+        # Validate required fields
+        required_fields = ['analysis', 'snowflake', 'aws']
+        missing_fields = [field for field in required_fields if field not in config_dict]
+        if missing_fields:
+            raise ValueError(f"Missing required configuration sections: {missing_fields}")
+            
+        return AnalysisConfig(**config_dict['analysis'])
+        
+    except yaml.YAMLError as e:
+        raise ValueError(f"Error parsing YAML configuration: {str(e)}")
+    except Exception as e:
+        raise ValueError(f"Error loading configuration: {str(e)}")
 
 def create_cost_forecast_chart(forecast_results):
     """Create interactive cost forecast chart"""
